@@ -1,0 +1,74 @@
+import java.util.*;
+public class LexicalAnalyzer
+{
+	public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+		String s=sc.nextLine();
+		List<String> kw=new ArrayList<>(),op=new ArrayList<>(),de=new ArrayList<>();
+		Collections.addAll(kw,"int","float","if","for","switch","case","do","while","char","String","double","long","short","void","main","println","return","boolean","new","break","else");
+		Collections.addAll(op,"<",">","=","!","+","-","*","%","/");
+		Collections.addAll(de,".",",",":",";");
+		int n=s.length(),c=0;
+		for(int i=0;i<n;i++){
+		    if((s.charAt(i)>='a' && s.charAt(i)<='z') || (s.charAt(i)>='A' && s.charAt(i)<='Z') || s.charAt(i)=='_'){
+		        for(int j=i+1;j<n;j++){
+		            if((s.charAt(j)>='a' && s.charAt(j)<='z') || (s.charAt(j)>='A' && s.charAt(j)<='Z') || s.charAt(j)=='_' || (s.charAt(j)>='0' && s.charAt(j)<='9'))
+		            continue;
+		            else{
+		                if(kw.contains(s.substring(i,j)))
+		                System.out.println(s.substring(i,j)+" is a keyword.");
+		                else
+		                System.out.println(s.substring(i,j)+" is an identifier.");
+		                i=j-1;
+		                break;
+		            }
+		        }
+		    }
+		    else if(s.charAt(i)>='0' && s.charAt(i)<='9'){
+		        for(int j=i+1;j<n;j++){
+		            if((s.charAt(j)>='a' && s.charAt(j)<='z') || (s.charAt(j)>='A' && s.charAt(j)<='Z') || s.charAt(j)=='_'){
+		                System.out.println("Lexical Error");
+		                System.exit(0);
+		            }
+		            else if((s.charAt(j)<'0' || s.charAt(j)>'9') && (s.charAt(j)!='.')){
+		                System.out.println(s.substring(i,j)+" is a number.");
+		                i=j-1;
+		                break;
+		            }
+		        }
+		    }
+		    else if(op.contains(s.charAt(i)+"")){
+		        if(op.contains(s.charAt(i+1)+"")){
+		            System.out.println(s.substring(i,i+2)+" is an operator.");
+		            i++;
+		        }
+		        else
+		        System.out.println(s.charAt(i)+" is an operator.");
+		    }
+		    else if(de.contains(s.charAt(i)+""))
+		    System.out.println(s.charAt(i)+" is a delimitor.");
+		    else if(s.charAt(i)==' ')
+		    continue;
+		    else
+		    System.out.println(s.charAt(i)+" is a symbol.");
+		    c++;
+		}
+		System.out.println("Total tokens : "+c);
+	}
+}
+
+
+OUTPUT : 
+
+if(a<b) a=10;
+if is a keyword.
+( is a symbol.
+a is an identifier.
+< is an operator.
+b is an identifier.
+) is a symbol.
+a is an identifier.
+= is an operator.
+10 is a number.
+; is a delimitor.
+Total tokens : 10

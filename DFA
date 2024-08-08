@@ -1,0 +1,49 @@
+import java.util.*;
+public class DFA
+{
+	public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+		String s=sc.next();
+		int q=0,prev_q=0,n=s.length(),i;
+		for(i=0;i<n;i++){
+		    prev_q=q;
+		    char c=s.charAt(i);
+		    if(c!='a' && c!='b' && c!='c'){
+		        break;
+		    }
+		    switch(q){
+		        case 0 :
+		            if(c=='a') q=1;
+		            break;
+		        case 1 :
+		            if(c=='b') q=2;
+		            else if(c=='c') q=0;
+		            break;
+		        case 2 :
+		            if(c=='a') q=1;
+		            else if(c=='b') q=0;
+		            else q=3;
+		            break;
+		        case 3 :
+		            if(c=='a') q=1;
+		            else q=0;
+		    }
+		    System.out.println("Transition : q"+prev_q+"->q"+q);
+		}
+		if(i==n && q==3)
+		System.out.println("Accepted");
+		else
+		System.out.println("Not Accepted");
+	}
+}
+
+Output : 
+
+abcabc
+Transition : q0->q1
+Transition : q1->q2
+Transition : q2->q3
+Transition : q3->q1
+Transition : q1->q2
+Transition : q2->q3
+Accepted
