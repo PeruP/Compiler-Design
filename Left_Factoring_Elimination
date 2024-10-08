@@ -1,0 +1,84 @@
+import java.util.*;
+public class Main{
+  public static void main (String[]args){
+Scanner sc = new Scanner (System.in);
+    int num;
+System.out.println("Enter no of productions : ");
+num = sc.nextInt();
+sc.nextLine();
+List<String> l = new ArrayList<>();
+System.out.println ("Enter the grammar : ");
+for (int i = 0; i < num; i++){
+l.add(sc.next());
+}
+for (int i = 0; i < num; i++){
+int flag = 0,m=Integer.MAX_VALUE;
+String str = l.get (i);
+String s1 = str.substring(3);
+String s[] = s1.split("\\|");
+for(int j=0;j<s.length;j++){
+   m=Math.min(m,s[j].length());
+}
+String ans="";
+List<String> l1 = new ArrayList(Arrays.asList(s));
+int c=1,k=0;
+while(k<m){
+   c=1;
+   for(int j=1;j<l1.size();j++){
+       if(l1.get(0).charAt(k)==l1.get(j).charAt(k))
+       c++;
+   }
+   if(c==l1.size()){
+       ans+=l1.get(0).charAt(k);
+       k++;
+       flag=1;
+   }
+   else
+   break;
+}
+if(flag==1){
+   System.out.println("Left factoring exists.\nThe productions after eliminating the left factoring are : ");
+   System.out.print(str.charAt(0)+"->"+ans+str.charAt(0)+"'\n"+str.charAt(0)+"'->");
+   for(int j=0;j<l1.size();j++){
+       if(k>=l1.get(j).length())
+       System.out.print("#");
+       else
+       System.out.print(l1.get(j).substring(k));
+       if(j!=l1.size()-1)
+       System.out.print("|");
+   }
+}
+else {
+   System.out.println("\nLeft factoring does not exist.");
+   System.out.println(str);
+}
+}
+  }
+}
+
+
+OUTPUT : 
+
+Enter no of productions :
+1
+Enter the grammar :
+A->its|itshg
+Left factoring exists.
+The productions after eliminating the left factoring are :
+A->itsA'
+A'->#|hg
+
+----------------------------------------------------------------------------
+
+Enter no of productions :
+2
+Enter the grammar :
+G->s|sd|d
+A->aAB|aBC|aAC
+
+Left factoring does not exist.
+G->s|sd|d
+Left factoring exists.
+The productions after eliminating the left factoring are :
+A->aA'
+A'->AB|BC|AC

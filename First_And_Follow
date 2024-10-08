@@ -1,0 +1,126 @@
+import java.util.*;
+public class Main
+{
+    public static int ntl,tl;
+    public static char t[],nt[];
+    public static String first[],follow[],gR[][];
+    public static void printSets(String a[]){
+        for(String s:a){
+            Set<Character> set = new HashSet<>();
+            String temp="";
+            for(int c=0;c<s.length();c++){
+                set.add(s.charAt(c));
+            }
+            for(Character b:set)
+            temp+=b;
+            System.out.println(temp);
+        }
+    }
+    public static int getIndex(char c){
+        for(int i=0;i<ntl;i++){
+            if(c==nt[i])
+            return i;
+        }
+        return -1;
+    }
+    public static String calculateFirst(int index){
+        String temp="";
+        for(String p : gR[index]){
+            char fC=p.charAt(0);
+            if(Character.isLowerCase(fC) || fC=='9')
+            temp+=fC;
+            else
+            temp+=calculateFirst(getIndex(fC));
+        }
+        return temp;
+    }
+    public static String calculateFollow(int index){
+        String temp="";
+        if(index==0)
+        temp+='$';
+        for(int j=0;j<ntl;j++){
+            for(String prod : gR[j]){
+                for(int k=0;k<prod.length();k++){
+                    if(prod.charAt(k)==nt[index]){
+                        if(k==prod.length()-1){
+                            if(j<index)
+                            temp+=follow[j];
+                        }
+                        else{
+                            int nextIndex=getIndex(prod.charAt(k+1));
+                            if(nextIndex!=-1){
+                                temp+=first[nextIndex];
+                                if(first[nextIndex].contains("9") && k+1==prod.length()-1)
+                                temp+=follow[j];
+                            }
+                            else
+                            temp+=prod.charAt(k+1);
+                        }
+                    }
+                }
+            }
+        }
+        return temp;
+    }
+public static void main(String[] args) {
+   Scanner sc=new Scanner(System.in);
+   System.out.println("Enter the non terminals : ");
+   String nterm=sc.next();
+   System.out.println("Enter the terminals : ");
+   String term=sc.next();
+   nt=nterm.toCharArray();
+   t=term.toCharArray();
+   ntl=nterm.length();
+   tl=term.length();
+   gR= new String[ntl][];
+   for(int i=0;i<ntl;i++){
+       System.out.println("Enter the no of productions for : "+nt[i]);
+       int nn=sc.nextInt();
+       gR[i]=new String[nn];
+       System.out.println("Enter the productions : ");
+       for(int j=0;j<nn;j++)
+       gR[i][j]=sc.next();
+   }
+   first=new String[ntl];
+   for(int i=0;i<ntl;i++){
+       first[i]=calculateFirst(i);
+   }
+   System.out.println("First : ");
+   printSets(first);
+   follow=new String[ntl];
+   for(int i=0;i<ntl;i++){
+       follow[i]=calculateFollow(i);
+   }
+   System.out.println("Follow : ");
+   printSets(follow);
+}
+}
+
+
+OUTPUT : 
+ 
+
+Enter the non terminals :
+EAB
+Enter the terminals :
+ilj
+Enter the no of productions for : E
+1
+Enter the productions :
+AB
+Enter the no of productions for : A
+1
+Enter the productions :
+il
+Enter the no of productions for : B
+1
+Enter the productions :
+j
+First :
+i
+i
+j
+Follow :
+$
+j
+$

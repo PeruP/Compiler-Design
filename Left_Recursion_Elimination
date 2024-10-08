@@ -1,0 +1,65 @@
+import java.util.*;
+public class main
+{
+public static void main(String[] args) {
+Scanner sc=new Scanner(System.in);
+int num;
+System.out.println("Enter no of productions : ");
+num=sc.nextInt();
+sc.nextLine();
+List<String> l =new ArrayList<>();
+System.out.println("Enter the grammar : ");
+for(int i=0;i<num;i++){
+   l.add(sc.next());
+}
+for(int i=0;i<num;i++){
+   int flag=0;
+   String str=l.get(i);
+   String s1=str.substring(3);
+   String s[] = s1.split("\\|");
+   List<String> l1 = new ArrayList(Arrays.asList(s));
+   List<String> l2 = new ArrayList<>();
+   for(int j=0;j<l1.size();j++){
+       if(l1.get(j).charAt(0)==str.charAt(0)){
+           flag=1;
+           l2.add(l1.get(j));
+           l1.remove(j);
+           j--;
+       }
+   }
+   if(flag==1){
+       System.out.println(str+" has left recursion.\nGrammar after eliminating left recursion is : ");
+       System.out.print(str.charAt(0)+"->");
+       for(int k=0;k<l1.size();k++){
+           System.out.print(l1.get(k)+str.charAt(0)+"'");
+           if(k!=l1.size()-1)
+             System.out.print("|");
+       }
+       System.out.print("\n"+str.charAt(0)+"'->");
+       for(int k=0;k<l2.size();k++){
+           System.out.print(l2.get(k).substring(1)+""+str.charAt(0)+"'|");
+       }
+       System.out.println("#");
+   }
+   else{
+       System.out.println(str+" has no left recursion.");
+   }
+}
+}
+}
+
+
+OUTPUT : 
+
+Enter no of productions :
+3
+Enter the grammar :
+E->EA|A
+A->a
+E->i
+E->EA|A has left recursion.
+Grammar after eliminating left recursion is :
+E->AE'
+E'->AE'|#
+A->a has no left recursion.
+E->i has no left recursion.
